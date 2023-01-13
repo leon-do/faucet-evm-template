@@ -1,13 +1,34 @@
+import { useState } from "react";
 import { FormEvent } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Faucet() {
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [hcaptchaToken, setHcaptchaToken] = useState("");
+
+  const handleVerificationSuccess = async (token: string, ekey: string) => {
+    // set hcaptcha token
+    setHcaptchaToken(token);
+    // enable submit button
+    setIsDisabled(false);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // disable submit button
+    setIsDisabled(true);
+    // send request to faucet
     const response = await fetch("/api/faucet", {
       method: "POST",
-      body: JSON.stringify({ url: event.currentTarget.url.value }),
-    }).then((res) => res.json());
-    console.log(response);
+      body: JSON.stringify({ address: event.currentTarget.address.value, hcaptchaToken }),
+    });
+    // parse response
+    const data = await response.json();
+    // if error, log error
+    if (response.status != 200) {
+      console.log("ERRRRR");
+      console.log(data.message);
+    }
   };
 
   return (
@@ -26,11 +47,14 @@ export default function Faucet() {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
-                <input id="url" name="url" type="url" autoComplete="url" required className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Social network URL containing your address" />
+                <input id="address" name="address" type="string" required className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Social network URL containing your address" />
               </div>
             </div>
+            <div className="flex justify-center">
+              <HCaptcha sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY as string} onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)} />
+            </div>
             <div>
-              <button type="submit" className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <button disabled={isDisabled} type="submit" className="disabled:opacity-25 group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 Give Me Testnet Funds
               </button>
             </div>
