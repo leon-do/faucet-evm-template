@@ -24,11 +24,11 @@ export default function Faucet() {
     });
     // parse response
     const data = await response.json();
-    // if error, log error
+    // if error
     if (response.status != 200) {
-      console.log("ERRRRR");
       console.log(data.message);
     }
+    console.log(data.message);
   };
 
   return (
