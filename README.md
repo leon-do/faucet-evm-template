@@ -1,6 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Faucet EVM Template
 
-## Getting Started
+<i> Testnet faucet template using Nextjs, Tailwind, hCaptcha and Redis </i>
+
+## One click deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fleon-do%2Ffaucet-evm-template.git)
+
+In Vercel, Add Environment Variables
+
+```
+PRIVATE_KEY=0000000000000000000000000000000000000000000000000000000000000000
+RPC_URL=https://rpc.ankr.com/eth_goerli
+COOLDOWN_HOURS=2
+VALUE=1230000000000000
+NEXT_PUBLIC_HCAPTCHA_SITE_KEY=00000000-0000-0000-0000-000000000000
+HCAPTCHA_SECRET=0x0000000000000000000000000000000000000000
+REDIS_URI=redis://default:key@url.com:6379
+```
+
+![](https://user-images.githubusercontent.com/19412160/212416161-e334625f-1a9c-41e2-9c4b-4c878545f45d.png)
+
+## Definitions
+
+PRIVATE_KEY: The private key of the wallet issuing funds. https://metamask.zendesk.com/hc/en-us/articles/360015289632
+
+RPC_URL: RPC url of the blockchain https://www.ankr.com/rpc/
+
+COOLDOWN_HOURS: Amount of hours users must wait to recieve funds again
+
+VALUE: Value in smallest unit (ie: wei) https://eth-converter.com/
+
+NEXT_PUBLIC_HCAPTCHA_SITE_KEY: Create hCaptcha account. Also known as `Sitekey` https://dashboard.hcaptcha.com/sites
+
+HCAPTCHA_SECRET: Create hCpatcha account. Also known as `Secret Key` https://dashboard.hcaptcha.com/settings
+
+REDIS_URI: Redis is an in-memory key-value database. https://redis.com/redis-enterprise-cloud/overview/
+
+
+## Getting Started Locally
 
 First, run the development server:
 
@@ -10,27 +47,13 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy then add .env varibles
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```
+cp .env.local.example .env.local
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Modern browsers have strict CORS and CORB rules, so opening a file://URI that loads hCaptcha will not work
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+The simplest way to use a tool such as [ngrok](https://ngrok.com/)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
