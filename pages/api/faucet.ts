@@ -10,6 +10,13 @@ type Message = {
   message: string;
 };
 
+/*
+ * Transfer coin to address. This is native token ie ETH
+ * @param {string} address - The address to transfer to
+ * @param {string} hcaptchaToken - The token from the hcaptcha
+ * @returns {Message} - The message to display to the user, either error message or transaction hash
+ * @example curl -X POST -H "Content-Type: application/json" -d '{"address": "0x123", "hcaptchaToken": "123"}' http://localhost:3000/api/faucet
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Message>) {
   // parse the request body
   const { address, hcaptchaToken } = JSON.parse(req.body);
